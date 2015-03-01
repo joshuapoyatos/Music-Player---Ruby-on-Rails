@@ -1,0 +1,91 @@
+
+<div id="main" class="container">
+	<div class="row sidenav">
+		<div id="leftside" class="col-md-4">
+			<nav class="navbar navbar-inverse sidenav">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="#">Hi</a>
+					</div>
+					<ul class="nav navbar-nav">
+						<li><a href="#">
+							<span class="glyphicon glyphicon-music"></span>
+						</a></li>
+						<li><a href="#"><img id="album" src="assets/album.png"/></a></li> 
+						<li><a href="#"><img id="artist" src="assets/artist.png"/></a></li> 
+						<li><a href="#">	
+							<input type="file" id="file" onchange="loadFile(this)" class="hidden" name="mp3file"/>
+							<label for="file" class="glyphicon glyphicon-plus-sign" ></label>
+						</a></li>
+						<li><h4><%= @name %></h4></li>
+					
+					</ul>
+				</div>
+			</nav>
+			
+			<div id="songslist">
+				<div id="letter">
+					<h4>S</h4>
+				</div>
+				
+			</div>
+			
+			
+		</div>
+		<div id="rightside" class="col-md-8">
+			
+			<nav class="navbar navbar-inverse">
+				<div class="container-fluid">
+					<div id="songheader" align="middle">
+						 <h6>Marvin Baky</h6><br>
+						 <h4><%= @name %></h4><br>
+						 <h6>Shit album</h6>
+					</div>
+				</div>
+			</nav>
+			
+			
+			<div id="artwork">
+				<div id="status">
+					<br>
+					<div class="row">
+						<div class="col-md-3" style= "text-align:right;">
+							<h6 style="color: white">start</h6>
+							</div>
+						<div class="col-md-6" style= "padding: 0 0 0 0">
+							<div id="content">
+							<span class="expand"></span>
+							</div>
+						</div>
+						
+						<div class="col-md-3">
+							<h6 style="color: white">end</h6>
+							</div>
+						<div class="col-md-6">
+							<a href="#"><img class="statusimages" src="assets/loop.png"/></a>
+						</div>
+						
+						<div class="col-md-6" style= "text-align:right;">
+							<a href="#"><img class="statusimages" src="assets/shuffle.png"/></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="controls" align="middle">
+					<audio id="song" style="display:none"><source type="audio/mpeg"></audio>
+					
+					<a href="#"><img class="ctrlimages" width=100% height=100% src="assets/previous.png"/></a>
+					<a href="#" onclick="togglePlay()"><img class="ctrlimages" src="assets/play.png" id="play"/></a>
+					<a href="#"><img class="ctrlimages" src="assets/next.png"/></a>
+					<section>
+						<div id="slider"></div> <!-- the Slider -->
+						<span class="volume"></span> <!-- Volume -->
+						</section>
+			</div>
+		</div>
+	</div>
+</div>
+<% if @file.present? %>
+<h4><%= @name %></h4>
+<% end %>
+
