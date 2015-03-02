@@ -53,7 +53,10 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-  root :to => 'player#index'
+  root :to => 'sessions#login_page'
+    get 'login' => 'sessions#login_page'
+  post 'login' => 'sessions#login'
+  get 'logout' => 'sessions#logout'
   get 'index' => 'player#index'
   post 'index' => 'player#postindex'
 end

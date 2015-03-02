@@ -14,11 +14,12 @@
 						<li><a href="#"><img id="album" src="assets/album.png"/></a></li> 
 						<li><a href="#"><img id="artist" src="assets/artist.png"/></a></li> 
 						<li><a href="#">	
+							<%= form_tag('/index', method: :get) do %>
 							<input type="file" id="file" onchange="loadFile(this)" class="hidden" name="mp3file"/>
 							<label for="file" class="glyphicon glyphicon-plus-sign" ></label>
+							<% end %>							
 						</a></li>
-						<li><h4><%= @name %></h4></li>
-					
+						<li><a><%= @name %></a></li>
 					</ul>
 				</div>
 			</nav>
@@ -37,9 +38,11 @@
 			<nav class="navbar navbar-inverse">
 				<div class="container-fluid">
 					<div id="songheader" align="middle">
-						 <h6>Marvin Baky</h6><br>
-						 <h4><%= @name %></h4><br>
-						 <h6>Shit album</h6>
+						 <h6><%= @sartist %></h6><br>
+						 <h4 data-path="<%= @file_name %>" id="songname"> 
+							<%= @stitle %>
+						</h4><br>
+						 <h6><%= @salbum %></h6>
 					</div>
 				</div>
 			</nav>
@@ -85,7 +88,3 @@
 		</div>
 	</div>
 </div>
-<% if @file.present? %>
-<h4><%= @name %></h4>
-<% end %>
-

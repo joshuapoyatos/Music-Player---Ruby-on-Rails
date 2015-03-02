@@ -45,8 +45,12 @@ $(document).ready(function(){
 			tooltip.fadeOut('fast');
 		},
 	});
+	
 
- 
+	if($('#songname').data("path")!=""){
+		console.log($('#songname').data('path') + "HI");
+		$('#artwork').css('background', 'url("assets/'+$('#songname').data('path') + '") no-repeat center');
+	}
 });
 
 
@@ -54,10 +58,16 @@ $(document).ready(function(){
      * Loading the tags using the FileAPI.
      */
     function loadFile(input) {
-	/*
-      var file = input.files[0],
+		var file = input.files[0],
         url = file.urn || file.name;
-
+		console.log(url);
+		
+		$("form").submit();
+		
+		//document.getElementById("song").src = "assets/" + url;
+		//document.getElementById("song").play();	
+	
+	/*
       ID3.loadTags(url, function() {
         showTags(url);
       }, {
