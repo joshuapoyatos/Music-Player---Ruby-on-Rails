@@ -54,7 +54,8 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
   root :to => 'sessions#login_page'
-    get 'login' => 'sessions#login_page'
+  get 'login' => 'sessions#login_page'
+  get 'playlists' => 'player#playlists'
   post 'login' => 'sessions#login'
   get 'logout' => 'sessions#logout'
   get 'index' => 'player#index'

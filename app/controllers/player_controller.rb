@@ -42,6 +42,9 @@ class PlayerController < ApplicationController
 		redirect_to action: :index
 	end
 	
+	def playlists
+	end
+	
 	def require_login
 		redirect_to '/login' if session[:user_id].nil?
 	end

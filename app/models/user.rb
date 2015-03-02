@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
-	has_many :playlists, dependent: :destroy
-	has_many :songs, dependent: :destroy
+	has_many :playlists
+	has_many :songs
 	
 	def self.create_user(name, username, password, password_confirm)
 		return false if password != password_confirm
