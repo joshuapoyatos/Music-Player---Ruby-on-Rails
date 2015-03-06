@@ -1,11 +1,14 @@
 class Song < ActiveRecord::Base
-	belongs_to :playlist
-	belongs_to :user
+	has_many :users_songs
+	has_many :users, through: :users_songs
+	has_many :playlists_songs
+	has_many :playlists, through: :playlists_songs
 	
-	def self.add_song(name, artist, album, file_name, user)
+
+	def self.add_song(name, artist, album, file_name)
 		return false if !name.present?	
 		return false if !file_name.present?	
-		new_song = Song.create(name: name, artist: artist, album: album, file_name: file_name, user_id: user)
+		new_song = Song.create(name: name, artist: artist, album: album, file_name: file_name)
 		new_song
 	end
 	
@@ -15,8 +18,8 @@ class Song < ActiveRecord::Base
 		File.open(path, "w+b") { |f| f.write(upload[:mp3file].read) }
 	end
 	
-	def self.delete_song(name)
-		Song.where(name: name).first.destroy
+	def self.delete_song(id)
+		Song.where(id: id).first.destroy
 	end
 	
 	def self.get_song(name)

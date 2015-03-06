@@ -11,15 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150304162009) do
+ActiveRecord::Schema.define(version: 20150306031945) do
 
   create_table "playlists", force: :cascade do |t|
-    t.string   "name",        limit: 255
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.integer  "user_id",     limit: 4
+    t.string   "name",       limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  create_table "playlists_songs", force: :cascade do |t|
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.integer  "song_id",     limit: 4
     t.integer  "playlist_id", limit: 4
   end
+
+  add_index "playlists_songs", ["song_id", "playlist_id"], name: "index_playlists_songs_on_song_id_and_playlist_id", using: :btree
 
   create_table "songs", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -28,7 +35,6 @@ ActiveRecord::Schema.define(version: 20150304162009) do
     t.string   "album",      limit: 255
     t.string   "artist",     limit: 255
     t.string   "file_name",  limit: 255
-    t.integer  "user_id",    limit: 4
   end
 
   create_table "users", force: :cascade do |t|
@@ -39,5 +45,23 @@ ActiveRecord::Schema.define(version: 20150304162009) do
     t.string   "password_hash", limit: 255
     t.string   "salt",          limit: 255
   end
+
+  create_table "users_playlists", force: :cascade do |t|
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.integer  "user_id",     limit: 4
+    t.integer  "playlist_id", limit: 4
+  end
+
+  add_index "users_playlists", ["user_id", "playlist_id"], name: "index_users_playlists_on_user_id_and_playlist_id", using: :btree
+
+  create_table "users_songs", force: :cascade do |t|
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.integer  "user_id",    limit: 4
+    t.integer  "song_id",    limit: 4
+  end
+
+  add_index "users_songs", ["user_id", "song_id"], name: "index_users_songs_on_user_id_and_song_id", using: :btree
 
 end

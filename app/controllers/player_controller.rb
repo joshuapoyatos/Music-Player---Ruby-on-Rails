@@ -4,7 +4,6 @@ class PlayerController < ApplicationController
 	require 'taglib'
 
 	def index
-		@name = User.where(id: session[:user_id]).first.name
 		@results = Song.all
 	end
 	
@@ -49,7 +48,7 @@ class PlayerController < ApplicationController
 				end
 			end
 
-			song = Song.add_song(tag.title, tag.artist, tag.album, params[:mp3file].original_filename, session[:user_id])
+			song = Song.add_song(tag.title, tag.artist, tag.album, params[:mp3file].original_filename)
 		end
 		redirect_to action: :index
 	end

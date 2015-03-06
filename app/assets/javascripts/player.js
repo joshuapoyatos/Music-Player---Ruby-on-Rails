@@ -120,3 +120,42 @@ $("#main").ready(function(){
 		// }
 		$("#wrapper").toggleClass("toggled");
 	}
+	
+	function toggle(option) {
+		if($("#options").className != 'menu'){
+			console.log($("#options").className);
+			$("#songslist").text("");
+			
+			var text = '<div id="letter">'
+			text += '<h4>Menu</h4>'
+			text += '</div>'
+					
+			text += '<div class="song">'
+			text += '<h4>Create New Playlist</h4>'
+			text += '<hr>'
+			text += '</div>'
+			
+			text += '<div class="song">'
+			text += '<h4>Select Playlist</h4>'
+			text += '<hr>'
+			text += '</div>'
+			
+			text += '<div class="song">'
+			text += '<h4>Local Songs only</h4>'
+			text += '<hr>'
+			text += '</div>'
+			
+			
+		
+			$("#songslist").append(text);
+			$("#options").toggleClass('menu');
+		}
+		else {
+			console.log("changee");
+			$("#songslist").text("");
+			
+			$("#options").toggleClass('menu');
+	
+		}
+	}
+	
