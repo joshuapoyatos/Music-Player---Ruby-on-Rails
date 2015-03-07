@@ -8,3 +8,52 @@ $("#new_link").hide().after("<%= j render('form') %>");
 						<h6> <%= song.artist%> - <%= song.album%> </h6>
 						<hr>					
 					<% end %>
+					
+					
+					
+					
+				<div class="globalplaylists">
+					<div id="letter">
+						<h4>Showing all playlists</h4>
+					</div>
+					<hr>
+					<% @all_playlists.each do |list| %>
+						<h4><%= list.name%></h4>
+						<hr>					
+					<% end %>
+				</div>
+				<div class="localplaylists">
+					<div id="letter">
+						<h4>Showing local playlists</h4>
+					</div>
+					<hr>
+					<% @local_playlists.each do |list| %>
+						<h4><%= list.name%></h4>
+						<hr>					
+					<% end %>
+				</div>
+				<div class="allsongs">
+					<div id="letter">
+						<h4>Showing all songs</h4>
+					</div>
+					<hr>
+					<% @all_songs.each do |songs| %>
+						<h4><%= songs.name%></h4>
+						<h6><%= songs.artist %> - <%= songs.album %></h6>
+						<hr>					
+					<% end %>
+				</div>
+				<div class="localsongs">
+					<div id="letter">
+						<h4>Showing local songs</h4>
+					</div>
+					<hr>
+					<% @local_songs.each do |songs| %>
+						<h4><%= songs.name%></h4>
+						<h6><%= songs.artist %> - <%= songs.album %></h6>
+						<hr>					
+					<% end %>
+				</div>
+				
+				
+				User.where(id: session[:user_id]).first.songs
