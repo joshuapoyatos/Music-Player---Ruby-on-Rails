@@ -1,0 +1,10 @@
+<div id = 'register'>
+	<h3> Register </h3>
+	<%= form_tag('/register', method: :post) do %>
+				<input placeholder='Name' class='textfield' type='text' name ='name'/>
+				<input placeholder='Username' class='textfield' type='text' name='username' />
+				<input placeholder='Password' class='textfield' type='password' name='password' />
+				<input placeholder='Confirm Password' class='textfield' type='password' name='confirmpass' />
+				</br> <div id = 'register_button'><button type='submit' class='btn btn-success'>Register</button></div>
+	<% end %>
+</div>

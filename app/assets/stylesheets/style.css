@@ -3,6 +3,7 @@ html, body {
 	height: 100%;
 	display:table;
 	margin: 0 0 0 0;
+	background-color: #0C0C0C;
 }
 
 .row{
@@ -22,7 +23,7 @@ html, body {
 	height: 100%;
 	padding: 0 0 0 0;
 }
-
+	
 #wrapper {
 	width: 100%;
 	height: 100%;
@@ -55,6 +56,10 @@ h4 {
 	margin: 0 0 0 5%;
 }
 
+.t4 h4{
+	margin-top:2%;
+}
+
 h6 {
 	color: gray;
 	margin: 0 0 0 5%;
@@ -71,6 +76,57 @@ hr {
 	width:100%;
 }
 
+#login{
+	color: #6D6D6D;
+	width: 175px;
+	height: 172px;
+	text-align:center;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10%;
+}
+
+#login_button{
+	outline: 0;
+	border: 0;
+}
+
+#register{
+	color: #6D6D6D;
+	width: 175px;
+	height: 172px;
+	text-align:center;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10%;
+}
+
+input.textfield{
+	padding: 10px;
+	outline: none;
+	background-color: rgba(255,255,255,0.1);
+	border: 1px solid transparent;
+	color: gray;
+	font-size: 1.2rem;
+	display: block;
+	margin: 5px;
+	width: 100%;	
+}
+		
+input.textfield:focus{
+	border: 1px solid rgba(255,255,255,0.1);
+}
+		
+::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder{
+	color: gray;
+	font-weight: lighter;
+}
+
+#register_button{
+	margin-top: 5%;
+	outline: no;
+}
+
 .navbar h4 {
 	border:gray;
 	line-height:20px;
@@ -81,8 +137,23 @@ hr {
 	height: 90%;
 }
 
+#songslist h4, #songslist h6 {
+	cursor: pointer; 
+}
+
 .song {
 	padding-top: 2%;
+}
+.allsongs :hover {
+	background-color: lightblue;
+	h4 {color: white;
+	};
+	h6 {color:white;
+	}
+}
+
+.hidde{
+	opacity: 100%;
 }
 
 #songheader { 
@@ -102,13 +173,7 @@ hr {
 	opacity:0.7;
 }
 
-#songslist :hover {
-	background-color: lightblue;
-	h4 {color: white;
-	}
-	h6 {color:white;
-	}
-}
+
 
 #content {
     width: 100%;
@@ -235,4 +300,8 @@ hr {
 	height:28px;
 	width:28px;
 	margin: 1% 5% 1.5% 5%;
+}
+
+.glyphicon-plus-sign{
+	cursor: pointer; 
 }

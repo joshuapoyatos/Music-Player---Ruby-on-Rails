@@ -1,0 +1,10 @@
+console.log("ASDIAHSYUF");
+$("#new_link").hide().after("<%= j render('form') %>");
+
+
+
+<% @results.each do |song| %>
+						<h4><%= song.name%></h4>
+						<h6> <%= song.artist%> - <%= song.album%> </h6>
+						<hr>					
+					<% end %>

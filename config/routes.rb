@@ -59,5 +59,12 @@ Rails.application.routes.draw do
   post 'login' => 'sessions#login'
   get 'logout' => 'sessions#logout'
   get 'index' => 'player#index'
+  get 'get_global_songs' => 'player#get_global_songs'
+  get 'get_playlist_songs' => 'player#get_playlist_songs'
+  get 'get_album_songs' => 'player#get_album_songs'
+  get 'get_artist_songs' => 'player#get_artist_songs'
+  get 'play_song' => 'player#play_song'
   post 'index' => 'player#postindex'
+  get 'register' => 'register#register_page'
+  post 'register' => 'register#register'
 end

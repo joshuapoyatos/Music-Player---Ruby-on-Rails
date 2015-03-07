@@ -1,13 +1,38 @@
 class PlayerController < ApplicationController
 	before_action :require_login
-
 	require 'taglib'
 
 	def index
-		@results = Song.all
+	end
+	
+	def get_global_songs
+		if params[:choice] == "globalsongs" || params[:choice] == "byartist" || params[:choice] == "byalbum"
+			render :json => { :songs => Song.all}
+		elsif params[:choice] == "localsongs"
+			render :json => { :songs => User.where(id: session[:user_id]).first.songs}
+		elsif params[:choice] == "selectplaylist"
+			render :json => { :songs => User.where(id: session[:user_id]).first.playlists}		
+		end
+	end
+	
+	def get_playlist_songs
+		render :json => { :songs => Playlist.where(id: params[:choice]).first.songs }
+	end
+	
+	def get_album_songs
+		render :json => { :songs => Song.where(album: params[:choice]).to_a }
+	end
+	
+	def get_artist_songs
+		render :json => { :songs => Song.where(artist: params[:choice]).to_a }
+	end
+	
+	def play_song 
+		render :json => { :songs => Song.where(id: params[:id]).first} 
 	end
 	
 	def postindex
+		
 		song = Song.save_to_server(params)
 		
 		TagLib::MPEG::File.open("public/Songs/"+ params[:mp3file].original_filename ) do |file|
@@ -52,10 +77,7 @@ class PlayerController < ApplicationController
 		end
 		redirect_to action: :index
 	end
-	
-	def playlists
-	end
-	
+
 	def require_login
 		redirect_to '/login' if session[:user_id].nil?
 	end

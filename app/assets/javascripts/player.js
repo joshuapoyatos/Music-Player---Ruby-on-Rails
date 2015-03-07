@@ -1,4 +1,6 @@
-$("#main").ready(function(){
+app = {};
+
+$(document).ready(function(){
 	//Store frequently elements in variables
 	var slider  = $('#slider'),
 		tooltip = $('.tooltip');
@@ -11,7 +13,7 @@ $("#main").ready(function(){
 		//Config
 		range: "min",
 		min: 1,
-		value: 35,
+		value: 100,
 
 		start: function(event,ui) {
 			tooltip.fadeIn('fast');
@@ -19,12 +21,10 @@ $("#main").ready(function(){
 
 		//Slider Event
 		slide: function(event, ui) { //When the slider is sliding
-
+			
 			var value  = slider.slider('value'),
 				volume = $('.volume');
-
 			tooltip.css('left', value).text(ui.value);  //Adjust the tooltip accordingly
-
 			if(value <= 5) { 
 				volume.css('background-position', '0 0');
 			} 
@@ -37,6 +37,8 @@ $("#main").ready(function(){
 			else {
 				volume.css('background-position', '0 -75px');
 			};
+			
+			document.getElementById("song").volume = value*1.0/100;
 
 		},
 
@@ -51,7 +53,9 @@ $("#main").ready(function(){
 		$('#artwork').css('background', 'url("assets/'+$('#songname').data('path') + '") no-repeat center');
 	}
 });
-
+	
+	
+	
 
     /**
      * Loading the tags using the FileAPI.
@@ -59,7 +63,7 @@ $("#main").ready(function(){
     function loadFile(input) {
 		$("form").submit();
 		
-		//document.getElementById("song").src = "assets/" + url;
+		//document.getElementById("song").src = "..assets/public/ + url;
 		//document.getElementById("song").play();	
 	
 	/*
@@ -71,33 +75,7 @@ $("#main").ready(function(){
       });*/
     }
 
-    /**
-     * Generic function to get the tags after they have been loaded.
-     */
-    function showTags(url) {
-	togglePlay();
-		var tags = ID3.getAllTags(url);
-		document.getElementById("song").src = "songs\\" + url;
-		
-		console.log(url);
-		console.log(tags);
-		addToPlaylist(tags);
-		$('#artwork').css('background-image', 'url('+ url +')');
-		var image = tags.picture;
-		if (image) {
-			var base64String = "";
-			for (var i = 0; i < image.data.length; i++) {
-				base64String += String.fromCharCode(image.data[i]);
-			}
-			var base64 = "data:" + image.format + ";base64," + window.btoa(base64String	);
-			//document.getElementById('artwork').setAttribute('src',base64);
-			$('#artwork').css('background', 'url('+ base64 +') no-repeat center');
-	
-			//document.getElementById('picture').setAttribute('src',base64);
-		}
-		
-		
-    }
+
 	
 	function addToPlaylist(tags){
 		var tempText = "<div>";
@@ -109,53 +87,250 @@ $("#main").ready(function(){
 	}
 	
 	function togglePlay() {
-		// if(document.getElementById("song").paused){
-			// document.getElementById("song").play();	
-			// document.getElementById("play").src = "assets/pause.png";
-		// }
-		// else {
-			// document.getElementById("song").pause();	
-			// document.getElementById("song").currentTime=0;
-			// document.getElementById("play").src = "assets/play.png";
-		// }
-		$("#wrapper").toggleClass("toggled");
-	}
-	
-	function toggle(option) {
-		if($("#options").className != 'menu'){
-			console.log($("#options").className);
-			$("#songslist").text("");
-			
-			var text = '<div id="letter">'
-			text += '<h4>Menu</h4>'
-			text += '</div>'
-					
-			text += '<div class="song">'
-			text += '<h4>Create New Playlist</h4>'
-			text += '<hr>'
-			text += '</div>'
-			
-			text += '<div class="song">'
-			text += '<h4>Select Playlist</h4>'
-			text += '<hr>'
-			text += '</div>'
-			
-			text += '<div class="song">'
-			text += '<h4>Local Songs only</h4>'
-			text += '<hr>'
-			text += '</div>'
-			
-			
-		
-			$("#songslist").append(text);
-			$("#options").toggleClass('menu');
+		if(document.getElementById("song").paused){
+			document.getElementById("song").play();	
+			document.getElementById("play").src = "assets/pause.png";
 		}
 		else {
-			console.log("changee");
-			$("#songslist").text("");
-			
-			$("#options").toggleClass('menu');
-	
+			document.getElementById("song").pause();
+			document.getElementById("play").src = "assets/play.png";
 		}
 	}
+	
+	
+	function show(option) {
+		$("#songslist").text("");
+		if( option == "menu"){
+			var text = '<div id="letter">'
+				+ '<h4>Menu</h4>'
+				+ '</div>'	
+				+ '<div class="song">'
+				+ '<h4>Create New Playlist</h4>'
+				+ '<hr>'
+				+ '</div>'
+				+ '<div class="song" onclick=show("selplay")>'
+				+ '<h4>Select Playlist</h4>'
+				+ '<hr>'
+				+ '</div>'
+				+ '<div class="song" id="localonly" style="position:relative" onclick=show("locsongs")>'
+				+ '<h4 style="cursor: pointer">Local Songs only</h4>'
+				+ '<hr>'
+				+ '</div>';
+			$("#songslist").append(text);
+		}
+		else if(option == "globalsongs"){
+			
+			$.ajax({
+				url: "/get_global_songs",
+				type: "get",
+				data: "choice=globalsongs",
+				dataType: "json",
+				success: function(data){
+					var text = '<div class="globalsongs t4">'+
+						'<div id="letter">' +
+							'<h4 style="margin-top:0">Showing all songs</h4>' +
+						'</div>' +
+						'<hr>';
+					for(var i=0; i<data.songs.length; i++){
+						text += '<div class="playable" onclick="playplayable(this)" id=' + data.songs[i].id + ' style="position:relative"><h4>' + data.songs[i].name 
+							+ '</h4>' + '<h6>' + data.songs[i].artist + ' - ' 
+							+ data.songs[i].album + '</h6><hr>'
+							+ '<span style="position:absolute; right:15px; top:8px;" class="glyphicon glyphicon-plus-sign"></span></div>';
+					}
+						text += '</div>';
+						$("#songslist").append(text);
+				}
+			});
+		}
+		else if(option == "artist"){
+			
+			$.ajax({
+				url: "/get_global_songs",
+				type: "get",
+				data: "choice=byartist",
+				dataType: "json",
+				success: function(data){
+					var text = '<div class="globalsongs t4">'+
+						'<div id="letter">' +
+							'<h4 style="margin-top:0">Showing all artists</h4>' +
+						'</div>' + '<hr>';
+					for(var i=0; i<data.songs.length; i++){
+						text += '<h4 onclick="showartistsongs(this)">' + data.songs[i].artist +'</h4>' + '<hr>';
+					}
+						text += '</div>';
+						$("#songslist").append(text);
+				}
+			});
+		}
+		else if(option == "album"){
+			
+			$.ajax({
+				url: "/get_global_songs",
+				type: "get",
+				data: "choice=byalbum",
+				dataType: "json",
+				success: function(data){
+					var text = '<div class="globalsongs t4">'+
+						'<div id="letter">' +
+							'<h4 style="margin-top:0">Showing all albums</h4>' +
+						'</div>' + '<hr>';
+					for(var i=0; i<data.songs.length; i++){
+						text += '<div ><h4 onclick="showalbumsongs(this)">' + data.songs[i].album +'</h4>' + '<hr></div>';
+					}
+						text += '</div>';
+						$("#songslist").append(text);
+				}
+			});
+		}
+		else if(option == "locsongs"){
+			
+			$.ajax({
+				url: "/get_global_songs",
+				type: "get",
+				data: "choice=localsongs",
+				dataType: "json",
+				success: function(data){
+					var text = '<div class="globalsongs t4" >'+
+						'<div id="letter">' +
+							'<h4 style="margin-top:0">Showing my songs</h4>' +
+						'</div>' +
+						'<hr>';
+					for(var i=0; i<data.songs.length; i++){
+						text += '<div class="playable" onclick="playplayable(this)" id=' + data.songs[i].id + ' style="position:relative"><h4>' + data.songs[i].name 
+							+ '</h4>' + '<h6>' + data.songs[i].artist + ' - ' 
+							+ data.songs[i].album + '</h6><hr>'
+							+ '<span style="position:absolute; right:15px; top:8px;" class="glyphicon glyphicon-plus-sign"></span></div>';
+					}
+						text += '</div>';
+						$("#songslist").append(text);
+				}
+			});
+		}
+		else if(option == "selplay"){
+			
+			$.ajax({
+				url: "/get_global_songs",
+				type: "get",
+				data: "choice=selectplaylist",
+				dataType: "json",
+				success: function(data){
+					var text = '<div class="globalsongs t4">'+
+						'<div id="letter">' +
+							'<h4 style="margin-top:0">Showing my playlists</h4>' +
+						'</div>' +
+						'<hr>';
+					for(var i=0; i<data.songs.length; i++){
+						text += '<h4 id=' + data.songs[i].id + ' onclick="selectPlaylist(this)">' + data.songs[i].name +'</h4><hr>';
+					}
+						text += '</div>';
+						$("#songslist").append(text);
+				}
+			});
+		}
+	}
+	
+	function selectPlaylist(object){
+		console.log(object.id);
+		$.ajax({
+			url: "/get_playlist_songs",
+			type: "get",
+			data: "choice="+ object.id,
+			dataType: "json",
+			success: function(data){
+				$("#songslist").text("");
+				var text = '<div class="globalsongs t4">'+
+					'<div id="letter">' +
+						'<h4 style="margin-top:0">Showing songs</h4>' +
+					'</div>' +
+					'<hr>';
+				for(var i=0; i<data.songs.length; i++){
+					text += '<div class="playable" onclick="playplayable(this)" id=' + data.songs[i].id + ' style="position:relative"><h4>' + data.songs[i].name 
+							+ '</h4>' + '<h6>' + data.songs[i].artist + ' - ' 
+							+ data.songs[i].album + '</h6><hr>'
+							+ '<span style="position:absolute; right:15px; top:8px;"></span></div>';
+				}
+					text += '</div>';
+					$("#songslist").append(text);
+			}
+		});
+	}
+	
+	function showalbumsongs(object){
+		console.log($(object).text());
+		$.ajax({
+			url: "/get_album_songs",
+			type: "get",
+			data: "choice=" + $(object).text(),
+			dataType: "json",
+			success: function(data){
+				$("#songslist").text("");
+				var text = '<div class="globalsongs t4">'+
+					'<div id="letter">' +
+						'<h4 style="margin-top:0">Showing songs</h4>' +
+					'</div>' +
+					'<hr>';
+				for(var i=0; i<data.songs.length; i++){
+					text += '<div class="playable" onclick="playplayable(this)" id=' + data.songs[i].id + ' style="position:relative"><h4>' + data.songs[i].name 
+							+ '</h4>' + '<h6>' + data.songs[i].artist + ' - ' 
+							+ data.songs[i].album + '</h6><hr>'
+							+ '<span style="position:absolute; right:15px; top:8px;"></span></div>';
+				}
+					text += '</div>';
+					$("#songslist").append(text);
+			}
+		});
+	}
+	
+	function showartistsongs(object){
+		console.log($(object).text());
+		$.ajax({
+			url: "/get_artist_songs",
+			type: "get",
+			data: "choice=" + $(object).text(),
+			dataType: "json",
+			success: function(data){
+				$("#songslist").text("");
+				var text = '<div class="globalsongs t4">'+
+					'<div id="letter">' +
+						'<h4 style="margin-top:0">Showing songs</h4>' +
+					'</div>' +
+					'<hr>';
+				for(var i=0; i<data.songs.length; i++){
+					text += '<div class="playable" onclick="playplayable(this)" id=' + data.songs[i].id + ' style="position:relative"><h4>' + data.songs[i].name 
+							+ '</h4>' + '<h6>' + data.songs[i].artist + ' - ' 
+							+ data.songs[i].album + '</h6><hr>'
+							+ '<span style="position:absolute; right:15px; top:8px;"></span></div>';
+				}
+					text += '</div>';
+					$("#songslist").append(text);
+			}
+		});
+	}
+	
+	function playplayable(object){
+		 // document.getElementById("song").src = "assets/hi.mp3";
+		 // document.getElementById("song").play();
+		 var mp3;
+		$.ajax({
+			url: "/play_song",
+			type: "get",
+			type: "get",
+			data: "id=" + object.id,
+			dataType: "json",
+			success: function(data){
+				
+				mp3 =  data.songs
+				document.getElementById("song").src = "Songs/" + data.songs.file_name;
+				document.getElementById("song").play();
+				console.log("PLAYED");
+				document.getElementById("play").src = "assets/pause.png";
+				
+				$("#artistname").text(data.songs.artist); 
+				$("#albumname").text(data.songs.album);
+				$("#songname").text(data.songs.name);
+			}
+		});
+		
+	}
+	
 	
